@@ -1,0 +1,18 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "subtitle-extractor"
+version = "0.1.0"
+description = "GUI to detect and extract SRT subtitles from MKV using ffmpeg"
+requires-python = ">=3.9"
+dependencies = [
+  "tk",
+]
+
+[tool.pytest.ini_options]
+addopts = "-q"
+testpaths = ["tests"]
+
+
