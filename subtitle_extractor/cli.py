@@ -6,17 +6,17 @@ from .ffutils import ffprobe_subtitle_streams, extract_subtitles
 
 
 def main() -> None:
-    parser = argparse.ArgumentParser(description="Detect and extract SRT subtitles from MKV")
-    parser.add_argument("mkv", nargs="?", help="Path to MKV file")
+    parser = argparse.ArgumentParser(description="Detect and extract SRT subtitles from video files")
+    parser.add_argument("video", nargs="?", help="Path to video file (e.g., .mkv, .mp4, .mov)")
     parser.add_argument("--probe", action="store_true", help="Only print detected subtitle streams")
     parser.add_argument("--extract-all", action="store_true", help="Extract all SRT subtitle streams")
     parser.add_argument("--out", default=None, help="Output directory (defaults to MKV directory)")
     args = parser.parse_args()
 
-    if not args.mkv:
-        parser.error("Please provide path to MKV file")
+    if not args.video:
+        parser.error("Please provide path to a video file")
 
-    mkv_path = Path(args.mkv)
+    mkv_path = Path(args.video)
     streams = ffprobe_subtitle_streams(mkv_path)
 
     if args.probe or not args.extract_all:

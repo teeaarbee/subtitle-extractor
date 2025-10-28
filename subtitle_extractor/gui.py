@@ -9,7 +9,7 @@ from .ffutils import ffprobe_subtitle_streams, extract_subtitles, SubtitleStream
 class App(tk.Tk):
     def __init__(self) -> None:
         super().__init__()
-        self.title("Subtitle Extractor (SRT from MKV)")
+        self.title("Subtitle Extractor (SRT from Video)")
         self.geometry("700x450")
 
         self.mkv_var = tk.StringVar()
@@ -18,7 +18,7 @@ class App(tk.Tk):
         # File chooser
         frm_top = tk.Frame(self)
         frm_top.pack(fill=tk.X, padx=10, pady=10)
-        tk.Label(frm_top, text="MKV file:").pack(side=tk.LEFT)
+        tk.Label(frm_top, text="Video file:").pack(side=tk.LEFT)
         entry = tk.Entry(frm_top, textvariable=self.mkv_var)
         entry.pack(side=tk.LEFT, fill=tk.X, expand=True, padx=6)
         tk.Button(frm_top, text="Browse", command=self.choose_mkv).pack(side=tk.LEFT)
@@ -48,7 +48,12 @@ class App(tk.Tk):
         self.detected_streams: List[SubtitleStream] = []
 
     def choose_mkv(self) -> None:
-        path = filedialog.askopenfilename(filetypes=[("MKV files", "*.mkv")])
+        path = filedialog.askopenfilename(
+            filetypes=[
+                ("Video files", "*.mkv *.mp4 *.mov *.m4v *.webm *.avi"),
+                ("All files", "*.*"),
+            ]
+        )
         if path:
             self.mkv_var.set(path)
             # Default output to the MKV's folder if none chosen yet
@@ -63,7 +68,7 @@ class App(tk.Tk):
     def detect(self) -> None:
         mkv = Path(self.mkv_var.get())
         if not mkv.is_file():
-            messagebox.showerror("Error", "Please choose a valid MKV file")
+            messagebox.showerror("Error", "Please choose a valid video file")
             return
         try:
             streams = ffprobe_subtitle_streams(mkv)
@@ -83,7 +88,7 @@ class App(tk.Tk):
         mkv = Path(self.mkv_var.get())
         outdir = Path(self.out_var.get() or mkv.parent)
         if not mkv.is_file():
-            messagebox.showerror("Error", "Please choose a valid MKV file")
+            messagebox.showerror("Error", "Please choose a valid video file")
             return
         if not outdir.exists():
             try:

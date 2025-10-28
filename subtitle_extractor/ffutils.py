@@ -48,6 +48,9 @@ def ffprobe_subtitle_streams(mkv_path: Path) -> List[SubtitleStream]:
         "ffprobe",
         "-v",
         "error",
+        # Optimize for network/remote files
+        "-probesize", "50M",  # Limit initial probing data
+        "-analyzeduration", "50M",  # Limit analysis duration
         "-select_streams",
         "s",
         "-show_entries",
@@ -100,10 +103,15 @@ def extract_subtitles(
         command = [
             "ffmpeg",
             "-y",
+            # Optimize for network/remote files
+            "-probesize", "50M",  # Limit initial probing data
+            "-analyzeduration", "50M",  # Limit analysis duration
+            "-fflags", "+fastseek",  # Enable fast seeking
             "-i",
             str(mkv_path),
             "-map",
             f"0:{stream.index}",
+            "-c", "copy",  # Copy codec without re-encoding
             str(out_path),
         ]
         result = _run_command(command)
