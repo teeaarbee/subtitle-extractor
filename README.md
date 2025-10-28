@@ -33,4 +33,11 @@ python3 -m subtitle_extractor.cli --extract-all /path/to/video.mkv
 - Only SubRip (`subrip`) subtitle streams are extracted (pure `.srt`). Other subtitle codecs are ignored.
 - Output filenames are derived from the source name and stream language/title.
 
+### Remote/Network Files (NAS, etc.)
+- **Important**: Extracting subtitles from remote files (over network/internet) requires reading through the entire video file since subtitles are interleaved with video data.
+- **For MKV files**: The tool automatically attempts to use `mkvextract` (if available) which is more efficient for remote extraction.
+  - Install mkvtoolnix: `brew install mkvtoolnix` (optional but recommended for faster network extraction)
+- **Best practice**: For very slow connections, copy the video file locally first, then extract subtitles.
+- **Timeouts**: Remote extraction has a 10-minute timeout (vs 2 minutes for local files).
+
 
